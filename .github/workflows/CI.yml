@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [staging]
+
+env:
+  NODE_VERSION: '17.x'
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-18.04
+
+    steps:
+      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+      - run: echo "🔎 The name of your branch is ${{ github.ref }}"
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node_version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - run: echo "🖥️ The workflow is now ready to start"
+
+      - name: echo "🐧 1 - Install dependencies"
+        run: |
+          yarn install
+
+      - name: echo "🐧 2 - Run Lint"
+        run: |
+          yarn lint
+
+      # - name: echo "🐧 3 - Run tests"
+      #   run: |
+      #     yarn test
+
+      - name: echo "🐧 4 - Build files"
+        run: |
+          yarn build
+
+      - run: echo "🍏 This job's status is ${{ job.status }}."
